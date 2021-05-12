@@ -1,0 +1,44 @@
+<html>
+    <body>
+
+    {% include "superior/barra.html" %}    
+    <h2 style="color: rebeccapurple">
+    Hola alumnos de python
+    </h2>
+
+    {% if nombre_persona == 'Profesor juan' %}
+
+    <p>El curso lo imparte el profesor titular</p>
+
+    {% else %}
+
+    <p>El curso lo imparte profe suplente</p>
+ 
+    {% endif %}
+
+
+
+
+    <p>El nombre del profesor es: {{nombre_persona.upper}} {{apellido_persona.upper}}</p>
+    <p>La fecha y hora es: {{fecha}}</p>
+    <p><strong>Temas del curso: </strong></p>
+    <p> 
+        <ul>
+        {% if temas %}    
+         {% for eltema in temas %}
+
+       
+             <li>{{eltema}} </li> 
+
+
+         {% endfor %}
+        {% else %}
+          <p>No hay elementos que mostrar</p> 
+        {% endif %}
+    </ul>
+
+
+
+    </p>
+    </body>
+    </html>
