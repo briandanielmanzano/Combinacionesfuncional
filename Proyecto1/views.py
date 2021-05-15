@@ -3,6 +3,7 @@ import datetime
 from django.template import Template, Context
 from django.template.loader import get_template
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 class Persona(object):
     def __init__(self,nombre,apellido):
@@ -36,13 +37,38 @@ def despedida (request):
 def dameFecha(request):
 
     fecha_actual=datetime.datetime.now()
+    h=[1,2,3,4,5,6,7,8,9,10,11,12,15]
+    h1="hola este es prueba         45 " +"<p> </p>"*4+"funcionaaaa"
+    h2="hola"
+    h3= """    <table border="1">
+  <caption>Ejemplo de tabla</caption>
+  <tbody>
+    <tr>
+      <td></td>
+      <th>A</th>
+      <th>B</th>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>A1</td>
+      <td>B1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>A2</td>
+      <td>B2</td>
+    </tr>
+  </tbody>
+</table>"""
     documento="""<html>
     <body>
     <h2>
-    Fecha y hora actuales %s
+    Fecha y hora actuales %s 
+    funciona %s
+   
     </h2>
     </body>
-    </html>""" % fecha_actual
+    </html>""" % (fecha_actual,h3)
 
     return HttpResponse(documento)
 
@@ -69,16 +95,22 @@ def cursoCss(request):
 
 
 
+@csrf_exempt
 
 
 
-yes=0
+ 
 def contacto(request):
     if request.method=="POST":
-     entradas=request.POST["entra"]
-     salidas=request.POST["salida"]
-     libres=request.POST["libres"]
-     grupos1=request.POST["grupo"].split(" ")
+     
+    #  entradas=entra
+    #  salidas=salida
+    #  libres=libres
+    #  grupos1=str(grupo).split(" ")
+     entradas=request.POST.get("entra")
+     salidas=request.POST.get("salida")
+     libres=request.POST.get("libres")
+     grupos1=request.POST.get("grupo").split(" ")
      grupos=grupos1[0]
      grupos1.pop(0)
 
@@ -166,14 +198,69 @@ def contacto(request):
            resuht3.append(resuht2[r])  
 
         
+    resuht4='''
+    <p style="text-align:center;">'''+primel+'''</p>
+    <div style="text-align:center;">
+    <table border="0" style="margin: 0 auto;" class="default">'''
+    k=""
+    for ni in resuht3:
+      k=""
+      for uy in ni:
+        k=k+"<td>"+uy+"</td>"
+      resuht4=resuht4+"<tr>"+k+"</tr>"
+
+    resuht4=resuht4+"</table> </div>"
+
+
+
+
     
+    documento1=""" 
+    <html>
+
+ 
+<title> COMBINACIONES  </title> 
+<head>
+<body>
+    <h1>Combinaciones </h1>
+   
+      
+        <form action="/contacto/" method="POST">"""+"""
+          
+            Hora de entrada:<input type="text" name="entra"> 
+            Hora de salida :<input type="text" name="salida"> 
+            Horas libres   :<input type="text" name="libres">  
+            Grupo          :<input type="text" name="grupo">   
+            <input type="submit" value="Buscar">
+            
+            <p>Si deseas buscar mas de un grupo escribelo en el campo grupo separado por un espacio, Ej: 4185 5789 4589</p>
+          
+        
+            
+        
+        </form>
+        
+
+
+
+    """+"""
+    <p>
+     %s 
+    </p>
+    </body>
+    
+   </head>
+   </html>""" % (resuht4)
+
+
+
 
     lib={"entrada1":entradas,"entrada2":salidas,"entrada3":libres,"entrada4":grupos,"textoplano":resuht3,"numa":len
     (materias51),"texle":range(len(resuht)),"primer":primel,"gru":grui1}
 
    
-
-    return render(request,"contacto.html",lib)
+    return HttpResponse(documento1)
+    # return render(request,"contacto.html",lib)
 
 
 # def contacto1(request):
